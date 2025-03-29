@@ -1,0 +1,13 @@
+cargo-features = ["edition2024"]
+[package]
+name = "sol-hello"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bytemuck_derive = "1.7.0"
+solana-program = "2.2.1"
+
+[lib]
+name = "sol_hello"
+crate-type = ["cdylib", "lib"]
