@@ -11,6 +11,11 @@ class CounterAccount {
     }
 }
 
+enum CounterInstruction {
+    Increment = 0,
+    Decrement = 1
+}
+
 
 const schema = { struct: { count: 'u32' } }
 
@@ -63,8 +68,14 @@ describe("testing counter contract ", () => {
     })
 
     test('should increase count ', async () => {
+        const incrementValue = 100
+        const instructionData = Buffer.concat([
+            Buffer.from([CounterInstruction.Increment]), // Instruction type
+            Buffer.from(borsh.serialize(schema, new CounterAccount({ count: incrementValue }))) // Payload
+        ]);
+        // const inc = borsh.serialize(schema, new CounterAccount({ count: 256 }))
 
-        const inc = borsh.serialize(schema, new CounterAccount({ count: 256 }))
+
 
         const tx = new Transaction().add(
             new TransactionInstruction({
@@ -74,7 +85,7 @@ describe("testing counter contract ", () => {
                     isWritable: true
                 }],
                 programId,
-                data: Buffer.from(Uint8Array.from([0, ...inc]))
+                data: instructionData
             })
         );
 
@@ -94,7 +105,7 @@ describe("testing counter contract ", () => {
         console.log(counter.count);
 
 
-        expect(counter.count).toBe(256)
+        expect(counter.count).toBe(incrementValue)
 
     })
 
