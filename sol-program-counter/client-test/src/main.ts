@@ -47,27 +47,27 @@ const main = async () => {
 
     const tx = new Transaction().add(createCounterAccIx);
 
-    const txHash = await sendAndConfirmTransaction(conn,tx, [adminKeypair, counterAccountKeypair]);
+    const txHash = await sendAndConfirmTransaction(conn, tx, [adminKeypair, counterAccountKeypair]);
 
     console.log("Transaction hash: ", txHash);
-    
-    
-    
-    
+
+
+
+
     const tx2 = new Transaction().add(
         new TransactionInstruction({
-            keys:[{
+            keys: [{
                 pubkey: counterAccountKeypair.publicKey,
                 isSigner: true,
                 isWritable: true
             }],
             programId,
-            data: Buffer.from(new Uint8Array([0,1,0,0,0]))
+            data: Buffer.from(new Uint8Array([0, 1, 0, 0, 0]))
         })
     );
-    
-    const txHash2 = await sendAndConfirmTransaction(conn, tx2, [adminKeypair,counterAccountKeypair]);
-    
+
+    const txHash2 = await sendAndConfirmTransaction(conn, tx2, [adminKeypair, counterAccountKeypair]);
+
     console.log("Transaction hash: ", txHash2);
     const counterAccount = await conn.getAccountInfo(counterAccountKeypair.publicKey);
     // console.log("Counter account: ", counterAccount);
@@ -76,8 +76,8 @@ const main = async () => {
     }
     const counter = borsh.deserialize(schema, counterAccount?.data) as CounterAccount;
     console.log("Counter: ", counter.count);
-    
-    
+
+
 
 
 }
